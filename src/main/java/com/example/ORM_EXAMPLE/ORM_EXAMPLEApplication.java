@@ -1,9 +1,10 @@
 package com.example.ORM_EXAMPLE;
 
 import com.example.ORM_EXAMPLE.models.AddressModel;
+import com.example.ORM_EXAMPLE.models.CategoryModel;
+import com.example.ORM_EXAMPLE.models.ProductModel;
 import com.example.ORM_EXAMPLE.models.UserModel;
-import com.example.ORM_EXAMPLE.repositories.BookRepository;
-import com.example.ORM_EXAMPLE.repositories.UserRepository;
+import com.example.ORM_EXAMPLE.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,6 +24,12 @@ public class ORM_EXAMPLEApplication implements CommandLineRunner {
 	private UserRepository userRepository;
 	@Autowired
 	private BookRepository bookRepository;
+	@Autowired
+	private AddressRepository addressRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ORM_EXAMPLEApplication.class, args);
@@ -32,7 +39,7 @@ public class ORM_EXAMPLEApplication implements CommandLineRunner {
 //	@Override
 	public void run(String... args) throws  Exception{
 
-//		//One to One
+//		//ONE TO ONE
 //// Create a new user and associate with the book
 //		UserModel user = new UserModel();
 //		user.setUserId(456);
@@ -70,35 +77,69 @@ public class ORM_EXAMPLEApplication implements CommandLineRunner {
 //		}
 //
 
+//
+//		//ONE TO MANY
+//		UserModel user= new UserModel();
+//		user.setUserId(101);
+//		user.setFirstName("Parth");
+//		user.setLastName("Sharma");
+//
+//		AddressModel a1 = new AddressModel();
+//		a1.setAddressId(1001);
+//		a1.setStreet("26/A");
+//		a1.setCity("Delhi");
+//		a1.setCountry("India");
+//		a1.setUser(user);//bidirectional mapping
+//
+//		AddressModel a2 = new AddressModel();
+//		a2.setAddressId(1012);
+//		a2.setStreet("56/D");
+//		a2.setCity("Lucknow");
+//		a2.setCountry("India");
+//		a2.setUser(user);//bidirectional mapping
+//
+//		List<AddressModel> addressModelList =new ArrayList<>();
+//		addressModelList.add(a1);
+//		addressModelList.add(a2);
+//
+//		user.setAddressModelList(addressModelList);
+//
+//		UserModel save = userRepository.save(user);
+//		logger.info("User created : with address");
 
-		//ONE TO MANY
-		UserModel user= new UserModel();
-		user.setUserId(101);
-		user.setFirstName("Parth");
-		user.setLastName("Sharma");
+		//MANY TO MANY
+		ProductModel product1 = new ProductModel();
+		product1.setpId("pid1");
+		product1.setpName("Nothing Phone 1");
 
-		AddressModel a1 = new AddressModel();
-		a1.setAddressId(1001);
-		a1.setStreet("26/A");
-		a1.setCity("Delhi");
-		a1.setCountry("India");
-		a1.setUser(user);//bidirectional mapping
+		ProductModel product2 = new ProductModel();
+		product2.setpId("pid2");
+		product2.setpName("Samsung S24 Ultra");
 
-		AddressModel a2 = new AddressModel();
-		a2.setAddressId(1012);
-		a2.setStreet("56/D");
-		a2.setCity("Lucknow");
-		a2.setCountry("India");
-		a2.setUser(user);//bidirectional mapping
+		ProductModel product3 = new ProductModel();
+		product3.setpId("pid3");
+		product3.setpName("Sony Bravia TV");
 
-		List<AddressModel> addressModelList =new ArrayList<>();
-		addressModelList.add(a1);
-		addressModelList.add(a2);
+		CategoryModel category1 = new CategoryModel();
+		category1.setcId("cid1");
+		category1.setcName("Electronics");
 
-		user.setAddressModelList(addressModelList);
+		CategoryModel category2 = new CategoryModel();
+		category2.setcId("cid2");
+		category2.setcName("Mobile Phones");
 
-		UserModel save = userRepository.save(user);
-		logger.info("User created : with address");
+
+		List<ProductModel> category1Products= category1.getProductList();
+		category1Products.add(product1);
+		category1Products.add(product2);
+		category1Products.add(product3);
+
+		List<ProductModel> category2Products= category2.getProductList();
+		category2Products.add(product1);
+		category2Products.add(product2);
+
+		categoryRepository.save(category1);
+		categoryRepository.save(category2);
 
 	}
 
